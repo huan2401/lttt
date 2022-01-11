@@ -86,31 +86,48 @@ int main() {
             F = F - (int) F;
         }
     }
+    
 
     printf("-> So luong ky tu trong day: %d \n",n);
     printf("\nMA HOA SHANNON: \n\n");
 
-    printf("%5s %16s %18s %14s", "Xi", "P(Xi)", "Pi", "ni");
+    printf("%5s %16s %18s %14s %10s %10s", "Xi", "P(Xi)", "Pi", "ni", "P(Xi)*ni", "H(Xi)"); //them cot H(Xi) va P(Xi)*ni
+    
+    
     for (i = 1; i <= maxni + 1; i++)
         printf(" ");
     printf("%9s", "Pi(2)");
+    
     for (i = 1; i <= maxni; i++)
         printf(" ");
     printf("%9s", "Ma");
+    
+    
     for (i = 1; i < k; i++) {
         ni = kitu[i].ni;
-        printf("\n%5c %7d/%d = %.5f %7d/%d = %.5f %7d", kitu[i].s1, kitu[i].P, n, (float)kitu[i].P/(float)n, kitu[i].F,
-                n, (float)kitu[i].F/(float)n, kitu[i].ni);
+        
+	//them cot Hx va Pxi*ni
+        printf("\n%5c %7d/%d = %.5f %7d/%d = %.5f %7d %.5f %f", kitu[i].s1, kitu[i].P, n, (float)kitu[i].P/(float)n, kitu[i].F,
+                n, (float)kitu[i].F/(float)n, kitu[i].ni, ((float)kitu[i].P/(float)n)*kitu[i].ni, (-((float)kitu[i].P/(float)n)*log((float)kitu[i].P/(float)n)));
+                
+                
         for (j = 1; j <= maxni - ni; j++)
             printf(" ");
         printf("%10s", "0.");
+        
         for (j = 1; j <= ni; j++)
             printf("%d", kitu[i].b[j]);
+            
         for (j = 1; j <= maxni - ni; j++)
             printf(" ");
         printf("%10s", " ");
+        
         for (j = 1; j <= ni; j++)
             printf("%d", kitu[i].b[j]);
+            
+        
+        
+            
     }
     printf("\n");
 
