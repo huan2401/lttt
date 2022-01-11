@@ -1,6 +1,7 @@
 #include <iostream>
-#include <iomanip>
+#include<iomanip>
 #include<math.h>
+#include<Windows.h>
 using namespace std;
 
 struct node {
@@ -11,8 +12,21 @@ struct node {
     float pro;
     int arr[30];
     int top;
+   
 } p[30];
+void SET_COLOR(int color)
+{
+    WORD wColor;
 
+
+    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    if (GetConsoleScreenBufferInfo(hStdOut, &csbi))
+    {
+        wColor = (csbi.wAttributes & 0xF0) + (color & 0x0F);
+        SetConsoleTextAttribute(hStdOut, wColor);
+    }
+}
 typedef struct node node;
 
 void fano(int l, int h, node p[])
@@ -86,14 +100,29 @@ void sapxep(int n, node p[])
 
 void display(int n, node p[])
 {
-    int ixxx, jxxx;
-    cout << "\n\n\n\tXi\tP(Xi)\tMa";
-    for (ixxx = n-1 ; ixxx >= 0; ixxx--) {
-        cout << "\n\t" << p[ixxx].sym << "\t" << p[ixxx].pro << "\t";
-        for (jxxx = 1; jxxx <= p[ixxx].top; jxxx++)
-            cout << p[ixxx].arr[jxxx];
+    int i, j;
+    
+    printf( "\n\n\n\tXi\tP(Xi)\tH(xi)\tLxP(x)\tMa");
+    SET_COLOR(1);
+    cout << "\n\t" << p[n-1].sym;
+    printf("\t%.2f\t%.2f\t%.2f\t" , p[n-1].pro ,-p[n-1].pro * log2(p[n-1].pro),p[n-1].pro*p[n-1].top);
+    for (j = 1; j <= p[n-1].top; j++)
+        printf("%i",p[n - 1].arr[j]);
+    SET_COLOR(3);
+    for (i = n - 2; i >= 1; i--) {
+        cout << "\n\t" << p[i].sym;
+        
+        printf("\t%.2f\t%.2f\t%.2f\t", p[i].pro, -p[i].pro * log2(p[i].pro), p[i].pro * p[i].top);
+    
+        for (j = 1; j <= p[i].top; j++)
+            cout << p[i].arr[j];
     }
-
+    SET_COLOR(1);
+    cout << "\n\t" << p[0].sym;
+    printf("\t%.2f\t%.2f\t%.2f\t", p[0].pro, -p[0].pro * log2(p[0].pro), p[0].pro * p[0].top);
+    for (j = 1; j <= p[0].top; j++)
+        printf("%i", p[0].arr[j]);
+    
 }
 
 void tinhtile(int haiv) {
@@ -104,10 +133,11 @@ void tinhtile(int haiv) {
         tinhH += (double)-log2(p[icl].pro) * p[icl].pro;
 
     }
-    tinhK = (double)tinhH / tinhL*100;
+    SET_COLOR(2);
+    tinhK = (double)tinhH / tinhL * 100;
     cout << "\n\n-> Entropy H(X) = " << setprecision(4) << tinhH << endl;
     cout << "\n-> Do dai tu ma trung binh L = " << setprecision(4) << tinhL << endl;
-    cout << "\n-> He so nen Kt = H(X)/L = " << setprecision(4) << tinhK/100 << " = " << setprecision(4) << tinhK<< "%";
+    cout << "\n-> He so nen Kt = H(X)/L = " << setprecision(4) << tinhK / 100 << " = " << setprecision(4) << tinhK << "%";
 }
 
 int main()
@@ -146,7 +176,7 @@ int main()
     int wx = 0;
     int wy = 0;
     int wz = 0;
-    int dem[10] = {0};
+    int dem[10] = { 0 };
 
 
 
@@ -158,167 +188,167 @@ int main()
     cout << "\n-> So luong ki tu trong day: " << count << endl;
     cout << "\nMA HOA FANO:";
     for (int ia = 0; ia < 100; ia++) {
-        if (ss[ia] == 'a'||ss[ia]=='A') {
+        if (ss[ia] == 'a' || ss[ia] == 'A') {
             wa++;
         }
     }
     for (int ib = 0; ib < 100; ib++) {
-        if (ss[ib] == 'b'||ss[ib]=='B') {
+        if (ss[ib] == 'b' || ss[ib] == 'B') {
             wb++;
         }
     }
     for (int ic = 0; ic < 100; ic++) {
-        if (ss[ic] == 'c'||ss[ic]=='C') {
+        if (ss[ic] == 'c' || ss[ic] == 'C') {
             wc++;
         }
     }
     for (int id = 0; id < 100; id++) {
-        if (ss[id] == 'd'||ss[id]=='D') {
+        if (ss[id] == 'd' || ss[id] == 'D') {
             wd++;
         }
     }
     for (int ie = 0; ie < 100; ie++) {
-        if (ss[ie] == 'e'||ss[ie]=='E') {
+        if (ss[ie] == 'e' || ss[ie] == 'E') {
             we++;
         }
     }
     for (int iff = 0; iff < 100; iff++) {
-        if (ss[iff] == 'f'||ss[iff]=='F') {
+        if (ss[iff] == 'f' || ss[iff] == 'F') {
             wf++;
         }
     }
     for (int ig = 0; ig < 100; ig++) {
-        if (ss[ig] == 'g'||ss[ig]=='G') {
+        if (ss[ig] == 'g' || ss[ig] == 'G') {
             wg++;
         }
     }
     for (int ih = 0; ih < 100; ih++) {
-        if (ss[ih] == 'h'||ss[ih]=='H') {
+        if (ss[ih] == 'h' || ss[ih] == 'H') {
             wh++;
         }
     }
     for (int ii = 0; ii < 100; ii++) {
-        if (ss[ii] == 'i'||ss[ii]=='I') {
+        if (ss[ii] == 'i' || ss[ii] == 'I') {
             wi++;
         }
     }
     for (int ijz = 0; ijz < 100; ijz++) {
-        if (ss[ijz] == 'j'||ss[ijz]=='J') {
+        if (ss[ijz] == 'j' || ss[ijz] == 'J') {
             wj++;
         }
     }
     for (int ik = 0; ik < 100; ik++) {
-        if (ss[ik] == 'k'||ss[ik]=='K') {
+        if (ss[ik] == 'k' || ss[ik] == 'K') {
             wk++;
         }
     }
     for (int il = 0; il < 100; il++) {
-        if (ss[il] == 'l'||ss[il]=='L') {
+        if (ss[il] == 'l' || ss[il] == 'L') {
             wl++;
         }
     }
     for (int im = 0; im < 100; im++) {
-        if (ss[im] == 'm'||ss[im]=='M') {
+        if (ss[im] == 'm' || ss[im] == 'M') {
             wm++;
         }
     }
     for (int in = 0; in < 100; in++) {
-        if (ss[in] == 'n'||ss[in]=='N') {
+        if (ss[in] == 'n' || ss[in] == 'N') {
             wn++;
         }
     }
     for (int io = 0; io < 100; io++) {
-        if (ss[io] == 'o'||ss[io]=='O') {
+        if (ss[io] == 'o' || ss[io] == 'O') {
             wo++;
         }
     }
     for (int ip = 0; ip < 100; ip++) {
-        if (ss[ip] == 'p'||ss[ip]=='P') {
+        if (ss[ip] == 'p' || ss[ip] == 'P') {
             wp++;
         }
     }
     for (int iq = 0; iq < 100; iq++) {
-        if (ss[iq] == 'q'||ss[iq]=='Q') {
+        if (ss[iq] == 'q' || ss[iq] == 'Q') {
             wq++;
         }
     }
     for (int ir = 0; ir < 100; ir++) {
-        if (ss[ir] == 'r'||ss[ir]=='R') {
+        if (ss[ir] == 'r' || ss[ir] == 'R') {
             wr++;
         }
     }
     for (int is = 0; is < 100; is++) {
-        if (ss[is] == 's'||ss[is]=='S') {
+        if (ss[is] == 's' || ss[is] == 'S') {
             ws++;
         }
     }
     for (int it = 0; it < 100; it++) {
-        if (ss[it] == 't'||ss[it]=='T') {
+        if (ss[it] == 't' || ss[it] == 'T') {
             wt++;
         }
     }
     for (int iu = 0; iu < 100; iu++) {
-        if (ss[iu] == 'u'||ss[iu]=='U') {
+        if (ss[iu] == 'u' || ss[iu] == 'U') {
             wu++;
         }
     }
     for (int iv = 0; iv < 100; iv++) {
-        if (ss[iv] == 'v'||ss[iv]=='V') {
+        if (ss[iv] == 'v' || ss[iv] == 'V') {
             wv++;
         }
     }
     for (int iw = 0; iw < 100; iw++) {
-        if (ss[iw] == 'w'||ss[iw]=='W') {
+        if (ss[iw] == 'w' || ss[iw] == 'W') {
             ww++;
         }
     }
     for (int ix = 0; ix < 100; ix++) {
-        if (ss[ix] == 'x'||ss[ix]=='X') {
+        if (ss[ix] == 'x' || ss[ix] == 'X') {
             wx++;
         }
     }
     for (int iy = 0; iy < 100; iy++) {
-        if (ss[iy] == 'y'||ss[iy]=='Y') {
+        if (ss[iy] == 'y' || ss[iy] == 'Y') {
             wy++;
         }
     }
     for (int iz = 0; iz < 100; iz++) {
-        if (ss[iz] == 'z'||ss[iz]=='Z') {
+        if (ss[iz] == 'z' || ss[iz] == 'Z') {
             wz++;
         }
     }
     for (int iz0 = 0; iz0 < 100; iz0++) {
-        if (ss[iz0] == '0' ) {
-           dem[0]++;
+        if (ss[iz0] == '0') {
+            dem[0]++;
         }
     }
     for (int iz1 = 0; iz1 < 100; iz1++) {
-        if (ss[iz1] == '1' ) {
+        if (ss[iz1] == '1') {
             dem[1]++;
         }
     }
     for (int iz2 = 0; iz2 < 100; iz2++) {
-        if (ss[iz2] == '2' ) {
-           dem[2]++;
+        if (ss[iz2] == '2') {
+            dem[2]++;
         }
     }
     for (int iz3 = 0; iz3 < 100; iz3++) {
-        if (ss[iz3] == '3' ) {
+        if (ss[iz3] == '3') {
             dem[3]++;
         }
     }
     for (int iz4 = 0; iz4 < 100; iz4++) {
-        if (ss[iz4] == '4' ) {
+        if (ss[iz4] == '4') {
             dem[4]++;
         }
     }
     for (int iz5 = 0; iz5 < 100; iz5++) {
-        if (ss[iz5] == '5' ) {
+        if (ss[iz5] == '5') {
             dem[5]++;
         }
     }
     for (int iz6 = 0; iz6 < 100; iz6++) {
-        if (ss[iz6] == '6' ) {
+        if (ss[iz6] == '6') {
             dem[6]++;
         }
     }
@@ -328,12 +358,12 @@ int main()
         }
     }
     for (int iz8 = 0; iz8 < 100; iz8++) {
-        if (ss[iz8] == '8' ) {
+        if (ss[iz8] == '8') {
             dem[8]++;
         }
     }
     for (int iz9 = 0; iz9 < 100; iz9++) {
-        if (ss[iz9] == '9' ) {
+        if (ss[iz9] == '9') {
             dem[9]++;
         }
     }
@@ -384,15 +414,15 @@ int main()
         }
 
     }
-    string chu[36] = { "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9"};
+      string chu[36] = { "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9" };
 
     int hienthichuphu = 0;
-    for (int afv = 0; afv <36; afv++) {
+    for (int afv = 0; afv < 36; afv++) {
         if (average[afv] != 0) {
             hienthichu[hienthichuphu] = chu[afv];
             hienthichuphu++;
 
-}
+        }
     }
 
     for (int ill = 0; ill <= sophuphu; ill++) {
