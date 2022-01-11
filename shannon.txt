@@ -1,0 +1,132 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+typedef struct {
+    char s1;
+    int ni, P, F, b[100];
+
+} nguon;
+void doicho(nguon *a, nguon *b) {
+    nguon c;
+    c = *a;
+    *a = *b;
+    *b = c;
+}
+
+int main() {
+//    freopen("test.txt", "r", stdin);
+    char *s;
+    nguon *kitu;
+    int i, j, n, k = 1, ni, *a, maxni;
+
+    s = (char *) malloc(100 * sizeof(char));
+    a = (int *) malloc(100 * sizeof(int));
+    kitu = (nguon *) malloc(100 * sizeof(nguon));
+
+    printf("Moi ban nhap day nguon:  \n");
+    gets(s);
+    fflush(stdin);
+//    puts(s);
+    n = strlen(s);
+
+    //Phan loai ki tu va tinh P(Xi)
+    for (j = 1; j <= 256; j++) {
+        a[k] = 0;
+        for (i = 0; i <= n; i++)
+            if ((int) s[i] == j) {
+                a[k]++;
+                kitu[k].s1 = s[i];
+            }
+        if (a[k] > 0) {
+            kitu[k].P = a[k];
+            k++;
+        }
+    }
+    for (i = 1; i < k; i++)
+        for (j = i; j < k; j++)
+            if (kitu[i].P < kitu[j].P)
+                doicho(&kitu[i], &kitu[j]);
+
+    //Tinh Pi
+
+    for (i = 1; i <= k; i++) {
+        if (i == 1)
+            kitu[1].F = 0;
+        if (i > 1)
+            kitu[i].F = kitu[i - 1].F + kitu[i - 1].P;
+    }
+
+    //Tinh ni
+    for (i = 1; i < k; i++) {
+        float j;
+        j = (float)n / (float)kitu[i].P;
+        float ni = (log(j) / log(2));
+        if(ni == (int)ni)
+            kitu[i].ni = (int)ni;
+        else
+            kitu[i].ni = (int)ni + 1;
+    }
+    maxni = kitu[1].ni;
+    for (i = 1; i < k; i++)
+        if (kitu[i].ni > maxni)
+            maxni = kitu[i].ni;
+
+    //Tinh Pi he 2
+    int l;
+    float F;
+    for (i = 1; i < k; i++) {
+        l = 1;
+        F = (float) kitu[i].F / n;
+        while ((l <= maxni) && (F != 0)) {
+            F = F * 2;
+            kitu[i].b[l] = (int) F /1 ;
+            l++;
+            F = F - (int) F;
+        }
+    }
+
+    printf("-> So luong ky tu trong day: %d \n",n);
+    printf("\nMA HOA SHANNON: \n\n");
+
+    printf("%5s %16s %18s %14s", "Xi", "P(Xi)", "Pi", "ni");
+    for (i = 1; i <= maxni + 1; i++)
+        printf(" ");
+    printf("%9s", "Pi(2)");
+    for (i = 1; i <= maxni; i++)
+        printf(" ");
+    printf("%9s", "Ma");
+    for (i = 1; i < k; i++) {
+        ni = kitu[i].ni;
+        printf("\n%5c %7d/%d = %.5f %7d/%d = %.5f %7d", kitu[i].s1, kitu[i].P, n, (float)kitu[i].P/(float)n, kitu[i].F,
+                n, (float)kitu[i].F/(float)n, kitu[i].ni);
+        for (j = 1; j <= maxni - ni; j++)
+            printf(" ");
+        printf("%10s", "0.");
+        for (j = 1; j <= ni; j++)
+            printf("%d", kitu[i].b[j]);
+        for (j = 1; j <= maxni - ni; j++)
+            printf(" ");
+        printf("%10s", " ");
+        for (j = 1; j <= ni; j++)
+            printf("%d", kitu[i].b[j]);
+    }
+    printf("\n");
+
+	float Hx = 0.0;
+	for(int i=1; i<k; i++){
+        float z = (kitu[i].P * 1.00 / n);
+		Hx -= z * log(z)/log(2);
+	}
+	printf("\n-> Entropy H(X) = %.3f \n",Hx);
+
+	float lTB = 0.00;
+	for(int i=0; i<k; i++){
+		lTB += kitu[i].ni * (kitu[i].P * 1.00 / n);
+	}
+	printf("\n-> Do dai tu ma trung binh L = %.3f \n",lTB);
+
+	printf("\n-> He so nen Kt = H(X)/L = %.4f = %.2f%%\n", Hx/lTB, Hx/lTB*100);
+    return 0;
+}
